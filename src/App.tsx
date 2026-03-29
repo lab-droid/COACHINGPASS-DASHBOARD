@@ -91,6 +91,11 @@ export default function App() {
   const [showMaintenance, setShowMaintenance] = useState(false);
   const [showUsage, setShowUsage] = useState(false);
 
+  // Set document title
+  useEffect(() => {
+    document.title = '코칭패스 대시보드';
+  }, []);
+
   // Simulate progress
   useEffect(() => {
     const timer = setInterval(() => {
