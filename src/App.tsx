@@ -79,6 +79,14 @@ const ITEMS: DashboardItem[] = [
     category: 'hr',
     icon: <FileText className="text-brand-gold" />,
     url: 'https://ai-645334686104.us-west1.run.app'
+  },
+  {
+    id: 'documents',
+    title: '코칭패스 학원 증빙 서류',
+    description: '코칭패스 학원 운영 및 관리에 필요한 증빙 서류들을 확인하고 관리하세요.',
+    category: 'management',
+    icon: <FileText className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1lqzWMzeYlQZikikFX4wYLbmpv_QRljxHWLZJqAfVk2g/edit?usp=sharing'
   }
 ];
 
