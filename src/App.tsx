@@ -45,6 +45,7 @@ const CATEGORIES = [
   { id: 'management', label: '경영', icon: <BarChart3 size={18} /> },
   { id: 'planning', label: '기획', icon: <FileText size={18} /> },
   { id: 'hr', label: '인사', icon: <Users size={18} /> },
+  { id: 'notice', label: '양식', icon: <FileText size={18} /> },
 ];
 
 const ITEMS: DashboardItem[] = [
@@ -87,6 +88,38 @@ const ITEMS: DashboardItem[] = [
     category: 'management',
     icon: <FileText className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1lqzWMzeYlQZikikFX4wYLbmpv_QRljxHWLZJqAfVk2g/edit?usp=sharing'
+  },
+  {
+    id: 'sms-generator',
+    title: '코칭패스 안내문자 생성기',
+    description: '고객 맞춤형 안내 문자를 빠르고 효율적으로 생성하여 소통의 퀄리티를 높이세요.',
+    category: 'marketing',
+    icon: <MessageSquare className="text-brand-gold" />,
+    url: 'https://service-439879309727.us-west1.run.app/'
+  },
+  {
+    id: 'exam-solution',
+    title: '기업 맞춤 기출 솔루션',
+    description: '기업별 맞춤형 기출 문제와 해설을 통해 실전 감각을 익히고 합격 가능성을 높이세요.',
+    category: 'planning',
+    icon: <GraduationCap className="text-brand-gold" />,
+    url: 'https://service-626624284204.us-west1.run.app'
+  },
+  {
+    id: 'missed-call-notice',
+    title: '부재중 안내문자',
+    description: '부재 시 고객에게 자동으로 전송될 정중하고 명확한 안내 문구를 확인하고 활용하세요.',
+    category: 'notice',
+    icon: <MessageSquare className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1N4VXCfTI1iE8dbeiShV_HbJjgzFJAW39769EXz0Vd1k/edit?usp=sharing'
+  },
+  {
+    id: 'schedule-inquiry',
+    title: '일정문의',
+    description: '일정 문의 시 활용할 수 있는 표준 양식을 확인하고 효율적으로 일정을 조율하세요.',
+    category: 'notice',
+    icon: <FileText className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/19BdYW_zJkR2rAwi_OW5eKSDBFJYFunmw8F9QPVDgWRE/edit?usp=sharing'
   }
 ];
 
