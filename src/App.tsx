@@ -415,7 +415,21 @@ const ITEMS: DashboardItem[] = [
 ];
 
 export default function App() {
-  const [apiKey, setApiKey] = useState<string>(() => localStorage.getItem('GEMINI_API_KEY') || '');
+  const [isMounted, setIsMounted] = useState(false);
+  const [apiKey, setApiKey] = useState<string>('');
+  
+  useEffect(() => {
+    setIsMounted(true);
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const saved = localStorage.getItem('GEMINI_API_KEY');
+        if (saved) setApiKey(saved);
+      }
+    } catch (error) {
+      console.warn('LocalStorage is not accessible:', error);
+    }
+  }, []);
+
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeSubCategory, setActiveSubCategory] = useState('all');
@@ -424,6 +438,18 @@ export default function App() {
   const [showMaintenance, setShowMaintenance] = useState(false);
   const [showUsage, setShowUsage] = useState(false);
 
+  // Safely update localStorage
+  const updateApiKey = (key: string) => {
+    setApiKey(key);
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('GEMINI_API_KEY', key);
+      }
+    } catch (error) {
+      console.warn('LocalStorage save failed:', error);
+    }
+  };
+
   // Reset subcategory when main category changes
   useEffect(() => {
     setActiveSubCategory('all');
@@ -431,39 +457,53 @@ export default function App() {
 
   // Set document title
   useEffect(() => {
-    document.title = '코칭패스 대시보드';
+    if (typeof document !== 'undefined') {
+      document.title = '코칭패스 대시보드';
+    }
   }, []);
 
-  // Simulate progress
+  // Simulate progress with safety
   useEffect(() => {
+    if (!isMounted) return;
     const timer = setInterval(() => {
-      setProgress(prev => (prev < 100 ? prev + 1 : 100));
-    }, 50);
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          return 100;
+        }
+        return prev + 1;
+      });
+    }, 30);
     return () => clearInterval(timer);
-  }, []);
+  }, [isMounted]);
 
   const handleSaveKey = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const key = formData.get('apiKey') as string;
-    setApiKey(key);
-    localStorage.setItem('GEMINI_API_KEY', key);
+    updateApiKey(key);
     setIsKeyModalOpen(false);
   };
 
-  const filteredItems = ITEMS.filter(item => {
-    const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
-    const matchesSubCategory = activeSubCategory === 'all' || item.subCategory === activeSubCategory;
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         item.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSubCategory && matchesSearch;
-  });
+  if (!isMounted) {
+    return <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-brand-gold font-bold">Loading...</div>;
+  }
 
-  return (
-    <div className="min-h-screen bg-brand-dark flex flex-col font-sans selection:bg-purple-500/30">
-      
-      {/* --- Header --- */}
-      <header className="sticky top-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+  try {
+    const filteredItems = ITEMS.filter(item => {
+      const q = searchQuery.toLowerCase();
+      const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+      const matchesSubCategory = activeSubCategory === 'all' || item.subCategory === activeSubCategory;
+      const matchesSearch = item.title.toLowerCase().includes(q) || 
+                           item.description.toLowerCase().includes(q);
+      return matchesCategory && matchesSubCategory && matchesSearch;
+    });
+
+    return (
+      <div className="min-h-screen bg-brand-dark flex flex-col font-sans selection:bg-purple-500/30">
+        
+        {/* --- Header --- */}
+        <header className="sticky top-0 z-50 bg-[#0a0a0a] md:bg-brand-dark/80 backdrop-blur-md border-b border-brand-border px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
         <div className="flex items-center gap-2 md:gap-3">
           <div className="w-8 h-8 md:w-10 md:h-10 bg-black border border-brand-gold/30 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-brand-gold/10">
             <Key className="text-brand-gold" size={18} md:size={24} />
@@ -596,7 +636,7 @@ export default function App() {
                     placeholder="🔍 찾으시는 항목을 검색하세요!"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-black/60 backdrop-blur-xl border-2 border-brand-gold/30 rounded-xl md:rounded-2xl py-3 md:py-4 pl-12 md:pl-14 pr-16 md:pr-20 text-sm md:text-base font-medium placeholder:text-gray-500 focus:outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+                    className="w-full bg-black border-2 border-brand-gold/30 rounded-xl md:rounded-2xl py-3 md:py-4 pl-12 md:pl-14 pr-16 md:pr-20 text-sm md:text-base font-medium placeholder:text-gray-500 focus:outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all shadow-[0_0_20px_rgba(212,175,55,0.1)]"
                   />
                   <div className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-1.5 px-3 md:px-3 py-2 md:py-1.5 bg-brand-gold border border-brand-gold/50 rounded-lg shadow-lg shadow-brand-gold/20 active:scale-95 transition-transform cursor-pointer">
                     <span className="text-[10px] md:text-xs font-black text-black tracking-tight">검색!</span>
@@ -746,7 +786,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-brand-dark/90 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 md:bg-brand-dark/90 backdrop-blur-sm"
           >
             <motion.div 
               initial={{ scale: 0.9, y: 20 }}
@@ -798,7 +838,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-brand-dark/90 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 md:bg-brand-dark/90 backdrop-blur-sm"
           >
             <motion.div 
               initial={{ scale: 0.9, y: 20 }}
@@ -828,5 +868,14 @@ export default function App() {
       </AnimatePresence>
 
     </div>
-  );
+    );
+  } catch (err) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-6 text-center">
+        <h2 className="text-brand-gold text-2xl font-bold mb-4">대시보드 로드 오류</h2>
+        <p className="text-gray-400 mb-8 max-w-xs">애플리케이션을 불러오는 중 문제가 발생했습니다. 브라우저를 새로고침하거나 나중에 다시 시도해주세요.</p>
+        <button onClick={() => window.location.reload()} className="px-6 py-3 bg-brand-gold text-black font-bold rounded-xl">새로고침</button>
+      </div>
+    );
+  }
 }
