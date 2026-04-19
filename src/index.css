@@ -6,6 +6,17 @@
   --color-brand-dark: #0a0a0a;
   --color-brand-card: #171717;
   --color-brand-border: #262626;
+  --breakpoint-xs: 480px;
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer base {

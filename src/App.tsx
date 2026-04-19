@@ -463,26 +463,26 @@ export default function App() {
     <div className="min-h-screen bg-brand-dark flex flex-col font-sans selection:bg-purple-500/30">
       
       {/* --- Header --- */}
-      <header className="sticky top-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-black border border-brand-gold/30 rounded-xl flex items-center justify-center shadow-lg shadow-brand-gold/10">
-            <Key className="text-brand-gold" size={24} />
+      <header className="sticky top-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-black border border-brand-gold/30 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-brand-gold/10">
+            <Key className="text-brand-gold" size={18} md:size={24} />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight">코칭패스 대시보드</h1>
-            <p className="text-[10px] text-brand-gold/60 uppercase tracking-widest font-semibold">Coachingpass Dashboard</p>
+            <h1 className="text-base md:text-xl font-bold tracking-tight">코칭패스</h1>
+            <p className="hidden xs:block text-[8px] md:text-[10px] text-brand-gold/60 uppercase tracking-widest font-semibold">Dashboard</p>
           </div>
         </div>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+        <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-400">
           <a href="#" className="hover:text-brand-gold transition-colors">홈</a>
           <a href="#" className="hover:text-brand-gold transition-colors">FQA</a>
         </nav>
 
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-brand-gold/10 border border-brand-gold/20 rounded-full">
-            <Users size={14} className="text-brand-gold" />
-            <span className="text-xs font-bold text-brand-gold">개발자 : 정혁신</span>
+        <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-brand-gold/10 border border-brand-gold/20 rounded-full">
+            <Users size={12} className="text-brand-gold" />
+            <span className="text-[10px] md:text-xs font-bold text-brand-gold whitespace-nowrap">정혁신</span>
           </div>
         </div>
       </header>
@@ -490,7 +490,7 @@ export default function App() {
       <main className="flex-1 overflow-y-auto no-copy">
         
         {/* --- Hero Section --- */}
-        <section className="relative w-full aspect-[16/9] max-h-[500px] overflow-hidden">
+        <section className="relative w-full min-h-[400px] md:aspect-[16/9] md:max-h-[500px] overflow-hidden">
           <img 
             src="https://picsum.photos/seed/goldkey/1920/1080?grayscale&blur=2" 
             alt="Hero" 
@@ -498,20 +498,20 @@ export default function App() {
             referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-transparent" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 py-12">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3 py-1 bg-black/40 backdrop-blur-md border border-brand-gold/20 rounded-full mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1 bg-black/40 backdrop-blur-md border border-brand-gold/20 rounded-full mb-4 md:mb-6"
             >
-              <Key size={14} className="text-brand-gold" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold">Coachingpass Dashboard</span>
+              <Key size={12} className="text-brand-gold" />
+              <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold">Coachingpass Dashboard</span>
             </motion.div>
             <motion.h2 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-5xl md:text-7xl font-black mb-4 tracking-tighter"
+              className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 tracking-tighter leading-tight"
             >
               합격의 열쇠<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-white to-brand-gold">코칭패스 대시보드</span>
@@ -520,22 +520,21 @@ export default function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-gray-400 max-w-2xl text-lg font-medium"
+              className="text-gray-400 max-w-2xl text-sm sm:text-base md:text-lg font-medium break-keep"
             >
-              코칭패스 대시보드를 활용해서 생산성과 효율성의 한계를 뛰어넘으세요.<br />
+              코칭패스 대시보드를 활용해서 생산성과 효율성의 한계를 뛰어넘으세요.<br className="hidden sm:block" />
               여러분의 수익화 파이프라인의 핵심이 될 것입니다.
             </motion.p>
           </div>
 
           {/* Usage Instructions (Top Left) */}
-          <div className="absolute top-8 left-8 z-20">
+          <div className="absolute top-4 left-4 md:top-8 md:left-8 z-20">
             <button 
               onClick={() => setShowUsage(!showUsage)}
-              className="group flex items-center gap-2 px-4 py-2 bg-black/40 hover:bg-black/60 backdrop-blur-xl border border-brand-gold/20 rounded-xl transition-all"
+              className="group flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-black/40 hover:bg-black/60 backdrop-blur-xl border border-brand-gold/20 rounded-xl transition-all"
             >
-              <HelpCircle size={18} className="text-brand-gold" />
-              <span className="text-sm font-bold">사용방법</span>
-              <Info size={14} className="text-gray-500 group-hover:text-white transition-colors" />
+              <HelpCircle size={16} md:size={18} className="text-brand-gold" />
+              <span className="text-xs md:text-sm font-bold">사용방법</span>
             </button>
             <AnimatePresence>
               {showUsage && (
@@ -582,42 +581,44 @@ export default function App() {
         </section>
 
         {/* --- Content Area --- */}
-        <section className="max-w-7xl mx-auto px-6 py-12">
+        <section className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
           
           {/* Search & Filters */}
-          <div className="bg-brand-card border border-brand-border rounded-3xl p-6 mb-12 shadow-xl space-y-8">
-            <div className="flex flex-col gap-10 items-center justify-between">
+          <div className="bg-brand-card border border-brand-border rounded-2xl md:rounded-3xl p-4 md:p-6 mb-8 md:mb-12 shadow-xl space-y-6 md:space-y-8">
+            <div className="flex flex-col gap-6 md:gap-10 items-center justify-between">
               <div className="relative w-full max-w-2xl group">
                 {/* Continuous Breathing Glow Effect */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-brand-gold/20 via-purple-500/20 to-brand-gold/20 rounded-[22px] blur-xl opacity-70 animate-pulse group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative">
-                  <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-gold group-focus-within:scale-110 transition-transform" size={20} />
+                  <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-brand-gold group-focus-within:scale-110 transition-transform" size={18} md:size={20} />
                   <input 
                     type="text" 
                     placeholder="🔍 찾으시는 항목을 검색하세요!"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-black/60 backdrop-blur-xl border-2 border-brand-gold/30 rounded-2xl py-4 pl-14 pr-20 text-base font-medium placeholder:text-gray-500 focus:outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+                    className="w-full bg-black/60 backdrop-blur-xl border-2 border-brand-gold/30 rounded-xl md:rounded-2xl py-3 md:py-4 pl-12 md:pl-14 pr-16 md:pr-20 text-sm md:text-base font-medium placeholder:text-gray-500 focus:outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all shadow-[0_0_20px_rgba(212,175,55,0.1)]"
                   />
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-3 py-1.5 bg-brand-gold border border-brand-gold/50 rounded-lg shadow-lg shadow-brand-gold/20">
-                    <span className="text-xs font-black text-black tracking-tight">검색!</span>
+                  <div className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-1.5 px-3 md:px-3 py-2 md:py-1.5 bg-brand-gold border border-brand-gold/50 rounded-lg shadow-lg shadow-brand-gold/20 active:scale-95 transition-transform cursor-pointer">
+                    <span className="text-[10px] md:text-xs font-black text-black tracking-tight">검색!</span>
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full">
+              <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 gap-2 md:gap-3 w-full">
                 {CATEGORIES.map(cat => (
                   <button
                     key={cat.id}
                     onClick={() => setActiveCategory(cat.id)}
                     className={cn(
-                      "flex items-center justify-center gap-2 px-4 py-4 rounded-xl text-sm font-bold transition-all border",
+                      "flex items-center justify-center gap-1.5 md:gap-2 px-2 md:px-4 py-3 md:py-4 rounded-lg md:rounded-xl text-[11px] md:text-sm font-bold transition-all border",
                       activeCategory === cat.id 
                         ? "bg-brand-gold border-brand-gold text-black shadow-lg shadow-brand-gold/20" 
                         : "bg-brand-dark text-gray-400 border-brand-border hover:border-brand-gold/50 hover:bg-brand-gold/5"
                     )}
                   >
-                    {React.cloneElement(cat.icon as React.ReactElement, { size: 20 })}
-                    {cat.label}
+                    <div className="hidden xs:block">
+                      {React.cloneElement(cat.icon as React.ReactElement, { size: 16, className: "md:w-5 md:h-5" })}
+                    </div>
+                    <span className="truncate">{cat.label}</span>
                   </button>
                 ))}
               </div>
@@ -630,12 +631,12 @@ export default function App() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="pt-6 border-t border-white/5 flex flex-wrap gap-2 justify-center"
+                  className="pt-6 border-t border-white/5 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2"
                 >
                   <button
                     onClick={() => setActiveSubCategory('all')}
                     className={cn(
-                      "px-4 py-2 rounded-full text-xs font-bold transition-all",
+                      "flex-shrink-0 px-5 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap",
                       activeSubCategory === 'all'
                         ? "bg-white text-black"
                         : "bg-white/5 text-gray-500 hover:text-white"
@@ -648,7 +649,7 @@ export default function App() {
                       key={sub.id}
                       onClick={() => setActiveSubCategory(sub.id)}
                       className={cn(
-                        "px-4 py-2 rounded-full text-xs font-bold transition-all",
+                        "flex-shrink-0 px-5 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap",
                         activeSubCategory === sub.id
                           ? "bg-brand-gold text-black italic"
                           : "bg-white/5 text-gray-500 hover:text-white"
@@ -663,7 +664,7 @@ export default function App() {
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             <AnimatePresence mode="popLayout">
               {filteredItems.map((item, idx) => (
                 <motion.div
@@ -682,18 +683,18 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold mb-2 group-hover:text-brand-gold transition-colors">{item.title}</h3>
-                    <p className="text-sm text-gray-500 line-clamp-2 mb-6 leading-relaxed no-copy">
+                  <div className="p-4 md:p-6">
+                    <h3 className="text-base md:text-lg font-bold mb-2 group-hover:text-brand-gold transition-colors">{item.title}</h3>
+                    <p className="text-xs md:text-sm text-gray-500 line-clamp-2 mb-4 md:mb-6 leading-relaxed no-copy">
                       {item.description}
                     </p>
                     <a 
                       href={item.url} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center gap-2 py-3 bg-brand-dark border border-brand-border rounded-2xl text-sm font-bold hover:bg-white/5 transition-all group-hover:border-brand-gold/50"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 md:py-3 bg-brand-dark border border-brand-border rounded-xl md:rounded-2xl text-xs md:text-sm font-bold hover:bg-white/5 transition-all group-hover:border-brand-gold/50"
                     >
-                      <ExternalLink size={16} />
+                      <ExternalLink size={14} className="md:w-4 md:h-4" />
                       바로가기
                     </a>
                   </div>
@@ -718,15 +719,23 @@ export default function App() {
       </footer>
 
       {/* --- Floating Action Buttons --- */}
-      <div className="fixed bottom-8 right-8 flex flex-col gap-4 z-40">
+      {/* --- Floating Action Buttons --- */}
+      <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 flex flex-col gap-3 md:gap-4 z-40 items-end">
+        <button 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="w-10 h-10 md:w-14 md:h-14 bg-brand-gold text-black rounded-full flex items-center justify-center shadow-xl shadow-brand-gold/20 hover:scale-110 active:scale-90 transition-all"
+        >
+          <Zap size={20} className="md:w-6 md:h-6" />
+        </button>
+
         <button 
           onClick={() => setShowMaintenance(true)}
-          className="group flex items-center gap-3 px-5 py-3 bg-brand-card hover:bg-brand-card/80 backdrop-blur-xl border border-brand-gold/20 rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95"
+          className="group flex items-center gap-2 md:gap-3 px-4 md:px-5 py-2.5 md:py-3 bg-brand-card hover:bg-brand-card/80 backdrop-blur-xl border border-brand-gold/20 rounded-xl md:rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95"
         >
-          <div className="w-8 h-8 bg-brand-gold/10 rounded-lg flex items-center justify-center">
-            <Settings className="text-brand-gold group-hover:rotate-90 transition-transform duration-500" size={18} />
+          <div className="w-6 h-6 md:w-8 md:h-8 bg-brand-gold/10 rounded-lg flex items-center justify-center">
+            <Settings className="text-brand-gold group-hover:rotate-90 transition-transform duration-500 w-4 h-4 md:w-5 md:h-5" />
           </div>
-          <span className="text-sm font-bold">오류/유지보수 문의</span>
+          <span className="text-xs md:text-sm font-bold">유지보수 문의</span>
         </button>
       </div>
 
