@@ -393,6 +393,24 @@ const ITEMS: DashboardItem[] = [
     subCategory: 'ad-promo',
     icon: <BookOpen className="text-brand-gold" />,
     url: 'https://drive.google.com/drive/folders/1BKMCs7Jtl9Pgofr_GEYXEvt05adTpXgV?usp=sharing'
+  },
+  {
+    id: 'enrollment-certificate-form',
+    title: '코칭패스 수강확인증 양식',
+    description: '수강생들의 교육 참여를 공식적으로 증명할 수 있는 수강확인증 표준 양식입니다.',
+    category: 'edu-management',
+    subCategory: 'student-care',
+    icon: <FileText className="text-brand-gold" />,
+    url: 'https://drive.google.com/file/d/1nXN-ES3Gc3mje-5k0Aobu9eUlswtK1JK/view?usp=sharing'
+  },
+  {
+    id: 'flow-basic-training',
+    title: '플로우 기본 교육 자료',
+    description: '코칭패스 협업 툴인 플로우(Flow)의 기본적인 사용법과 활용 방법이 담긴 교육 자료입니다.',
+    category: 'sales-service',
+    subCategory: 'manual',
+    icon: <FileText className="text-brand-gold" />,
+    url: 'https://drive.google.com/file/d/1o44jeB6ZBaFbtZvr0Yy3O9rVZVqR8-Fd/view?usp=sharing'
   }
 ];
 
