@@ -8,19 +8,24 @@ import {
   Key, 
   CheckCircle2, 
   XCircle,
+  Calendar,
   Mail,
+  CreditCard,
   ExternalLink,
   Search,
   Rocket,
   Monitor,
   BarChart3,
   Palette,
+  Image,
   Video,
   FileText,
   MessageSquare,
   GraduationCap,
   ChevronRight,
-  Info
+  Info,
+  Ticket,
+  Clock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
@@ -46,6 +51,7 @@ const CATEGORIES = [
   { id: 'planning', label: '기획', icon: <FileText size={18} /> },
   { id: 'hr', label: '인사', icon: <Users size={18} /> },
   { id: 'notice', label: '양식', icon: <FileText size={18} /> },
+  { id: 'image', label: '이미지', icon: <Palette size={18} /> },
 ];
 
 const ITEMS: DashboardItem[] = [
@@ -56,14 +62,6 @@ const ITEMS: DashboardItem[] = [
     category: 'hr',
     icon: <Key className="text-brand-gold" />,
     url: 'https://ai-149827241755.us-west1.run.app'
-  },
-  {
-    id: 'analysis',
-    title: '기업&직무분석 솔루션 제작',
-    description: '기업과 직무에 대한 심층적인 분석을 통해 최적화된 솔루션을 제공합니다.',
-    category: 'planning',
-    icon: <BarChart3 className="text-brand-gold" />,
-    url: 'https://service-613920434313.us-west1.run.app'
   },
   {
     id: 'custom',
@@ -98,14 +96,6 @@ const ITEMS: DashboardItem[] = [
     url: 'https://service-439879309727.us-west1.run.app/'
   },
   {
-    id: 'exam-solution',
-    title: '기업 맞춤 기출 솔루션',
-    description: '기업별 맞춤형 기출 문제와 해설을 통해 실전 감각을 익히고 합격 가능성을 높이세요.',
-    category: 'planning',
-    icon: <GraduationCap className="text-brand-gold" />,
-    url: 'https://service-626624284204.us-west1.run.app'
-  },
-  {
     id: 'missed-call-notice',
     title: '부재중 안내문자',
     description: '부재 시 고객에게 자동으로 전송될 정중하고 명확한 안내 문구를 확인하고 활용하세요.',
@@ -120,6 +110,126 @@ const ITEMS: DashboardItem[] = [
     category: 'notice',
     icon: <FileText className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/19BdYW_zJkR2rAwi_OW5eKSDBFJYFunmw8F9QPVDgWRE/edit?usp=sharing'
+  },
+  {
+    id: 'pre-reservation-form',
+    title: '가예약 양식',
+    description: '가예약 접수 시 활용할 수 있는 표준 양식을 확인하고 예약 프로세스를 체계화하세요.',
+    category: 'notice',
+    icon: <FileText className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1yhQBosWWbJ-bvCe4wlUi5sVcc3eVWOmf76k07r-Hc1o/edit?usp=sharing'
+  },
+  {
+    id: 'pre-reservation-msg',
+    title: '가예약 안내문자',
+    description: '가예약 시 고객에게 전송하는 표준 안내 문자 양식입니다.',
+    category: 'notice',
+    icon: <MessageSquare className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1yhQBosWWbJ-bvCe4wlUi5sVcc3eVWOmf76k07r-Hc1o/edit?usp=sharing'
+  },
+  {
+    id: 'coaching-place-info',
+    title: '코칭 장소 안내',
+    description: '코칭이 진행되는 장소에 대한 상세 정보와 안내 문구입니다.',
+    category: 'notice',
+    icon: <Monitor className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1BiLPVCv8b2sp7-4fft5Ph3jpXP3c5oJgzxevv_y78j0/edit?usp=sharing'
+  },
+  {
+    id: 'certification-image',
+    title: '코칭패스 국가보훈부 지정교육기관 인증이미지',
+    description: '국가보훈부로부터 지정받은 공식 교육기관 인증 이미지입니다. 홍보 및 신뢰도 향상을 위해 활용하세요.',
+    category: 'image',
+    icon: <Image className="text-brand-gold" />,
+    url: 'https://drive.google.com/file/d/1cJGHeI36jwUgsildWW2jQ8zfQuvwDK0f/view?usp=sharing'
+  },
+  {
+    id: 'registration-cert',
+    title: '넥스트인 원격학원(코칭패스) 학원설립운영 등록증명서',
+    description: '넥스트인 원격학원의 공식 학원설립운영 등록증명서입니다. 정식 등록된 교육기관임을 증명하는 서류입니다.',
+    category: 'image',
+    icon: <Image className="text-brand-gold" />,
+    url: 'https://drive.google.com/file/d/1pwl7m6YOiYLFHNKAA6lH2xv8lxvpLGQN/view?usp=sharing'
+  },
+  {
+    id: 'business-registration',
+    title: '주식회사 넥스트인 사업자등록증',
+    description: '주식회사 넥스트인의 공식 사업자등록증 이미지입니다. 법인 사업자 정보를 확인할 수 있습니다.',
+    category: 'image',
+    icon: <Image className="text-brand-gold" />,
+    url: 'https://drive.google.com/file/d/1cGQI4I7nb_Knq3wpf_DVEb4N2v8cIyEP/view?usp=sharing'
+  },
+  {
+    id: 'coaching-prep-corp',
+    title: '코칭 전 준비물_기업',
+    description: '코칭 시작 전 기업 측에서 준비해야 할 사항들을 확인할 수 있는 안내 이미지입니다.',
+    category: 'image',
+    icon: <Image className="text-brand-gold" />,
+    url: 'https://drive.google.com/file/d/1TVbiVT_yl8eedtweHDAQCcCmblQxINjp/view?usp=drive_link'
+  },
+  {
+    id: 'coaching-prep-academic',
+    title: '코칭 전 준비물_진학',
+    description: '코칭 시작 전 진학 준비생들이 준비해야 할 사항들을 확인할 수 있는 안내 이미지입니다.',
+    category: 'image',
+    icon: <Image className="text-brand-gold" />,
+    url: 'https://drive.google.com/file/d/1kkUZzs32HprwqAzqcAEDkCfOpPxEvYyM/view?usp=drive_link'
+  },
+  {
+    id: 'toss-interest-free',
+    title: '카드사 무이자 할부 (토스페이먼츠 - 매월 자동변경)',
+    description: '토스페이먼츠에서 제공하는 매월 업데이트되는 카드사별 무이자 할부 혜택 정보를 확인하세요.',
+    category: 'sales',
+    icon: <CreditCard className="text-brand-gold" />,
+    url: 'https://consumer.tosspayments.com/notice/free-installment'
+  },
+  {
+    id: 'face-to-face-reservations',
+    title: '대면 장소 예약 관련 시간별 맨션 담당자',
+    description: '대면 장소 예약 시 시간대별 담당자 정보를 확인하고 업무를 조율하세요.',
+    category: 'sales',
+    icon: <Users className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1dL4cg1TmFxAWKrVHDEC3UMGeijXpjjYV2yHdExZ44fY/edit?usp=sharing'
+  },
+  {
+    id: 'parking-info',
+    title: '코칭장소 주차관련 안내',
+    description: '코칭 장소별 주차 가능 여부와 이용 방법을 확인하여 방문 시 불편함을 최소화하세요.',
+    category: 'sales',
+    icon: <Info className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1Gqnd9KCCQ-VYT4ft4Y03z9ykYCUolLXc6DTzsV4g61M/edit?usp=sharing'
+  },
+  {
+    id: 'solution-required-info',
+    title: '솔루션 신청시 필수로 전달해야 되는 사항',
+    description: '솔루션 신청 시 누락 없이 정확한 정보 전달을 위해 필요한 필수 항목들을 확인하세요.',
+    category: 'sales',
+    icon: <CheckCircle2 className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1NjCpDthYImj66KSFGNr82vBK14Y863mxAFGVFuaK9BE/edit?usp=sharing'
+  },
+  {
+    id: 'flow-calendar-manual',
+    title: '일정확정시 플로우 캘린더 추가 매뉴얼',
+    description: '코칭 일정이 확정된 후 플로우 캘린더에 일정을 등록하는 상세 매뉴얼입니다.',
+    category: 'sales',
+    icon: <Calendar className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/17a2n9UKcX4Jn-Iauydl3Y4PQ165FqfFSvqrdq0_WI0M/edit?usp=sharing'
+  },
+  {
+    id: 'coupon-manual',
+    title: '코칭패스 쿠폰번호 및 사용방법',
+    description: '코칭패스 쿠폰 발급 번호와 웹사이트에서의 사용 방법을 안내하는 매뉴얼입니다.',
+    category: 'sales',
+    icon: <Ticket className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1Vep79nvGaoLnmiMVlsYtHE2tiBgjAhHAqljcxhOtDmw/edit?usp=sharing'
+  },
+  {
+    id: 'cs-business-hours',
+    title: '코칭패스 CS 업무시간 안내',
+    description: '코칭패스의 고객 서비스(CS) 운영 시간과 대응 가능 시간대를 확인하세요.',
+    category: 'sales',
+    icon: <Clock className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1QJl0diRF7uA4knQoi6CD9Wo4yl3OIwjvv5KjcP0J0rk/edit?usp=sharing'
   }
 ];
 
