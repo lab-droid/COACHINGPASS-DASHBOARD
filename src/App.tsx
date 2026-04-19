@@ -25,7 +25,12 @@ import {
   ChevronRight,
   Info,
   Ticket,
-  Clock
+  Clock,
+  ShieldCheck,
+  Zap,
+  Briefcase,
+  Star,
+  BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
@@ -36,22 +41,104 @@ interface DashboardItem {
   title: string;
   description: string;
   category: string;
+  subCategory: string;
   tag?: string;
   icon: React.ReactNode;
   status?: 'certified' | 'free';
   url?: string;
 }
 
+interface CategoryDefinition {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  subCategories: { id: string; label: string }[];
+}
+
 // --- Constants ---
-const CATEGORIES = [
-  { id: 'all', label: '전체', icon: <LayoutDashboard size={18} /> },
-  { id: 'sales', label: '영업', icon: <Users size={18} /> },
-  { id: 'marketing', label: '마케팅', icon: <TrendingUp size={18} /> },
-  { id: 'management', label: '경영', icon: <BarChart3 size={18} /> },
-  { id: 'planning', label: '기획', icon: <FileText size={18} /> },
-  { id: 'hr', label: '인사', icon: <Users size={18} /> },
-  { id: 'notice', label: '양식', icon: <FileText size={18} /> },
-  { id: 'image', label: '이미지', icon: <Palette size={18} /> },
+const CATEGORIES: CategoryDefinition[] = [
+  { 
+    id: 'all', 
+    label: '전체', 
+    icon: <LayoutDashboard size={18} />,
+    subCategories: []
+  },
+  { 
+    id: 'ai-solution', 
+    label: 'AI 솔루션', 
+    icon: <Rocket size={18} />,
+    subCategories: [
+      { id: 'smart-tool', label: '스마트 툴' },
+      { id: 'custom-ai', label: '맞춤형 AI' }
+    ]
+  },
+  { 
+    id: 'strategic-marketing', 
+    label: '전략적 마케팅', 
+    icon: <TrendingUp size={18} />,
+    subCategories: [
+      { id: 'content-plan', label: '콘텐츠 기획' },
+      { id: 'ad-promo', label: '광고/홍보' },
+      { id: 'mkt-strategy', label: '마케팅 전략' }
+    ]
+  },
+  { 
+    id: 'sales-service', 
+    label: '영업 서비스', 
+    icon: <Users size={18} />,
+    subCategories: [
+      { id: 'manual', label: '업무 매뉴얼' },
+      { id: 'operation', label: '운영 & 결제' }
+    ]
+  },
+  { 
+    id: 'edu-management', 
+    label: '교육 & 수강 관리', 
+    icon: <GraduationCap size={18} />,
+    subCategories: [
+      { id: 'student-care', label: '수강생 케어' },
+      { id: 'curriculum', label: '커리큘럼 가이드' },
+      { id: 'post-management', label: '사후 관리' }
+    ]
+  },
+  { 
+    id: 'b2b-business', 
+    label: 'B2B 사업 & 제안', 
+    icon: <Briefcase size={18} />,
+    subCategories: [
+      { id: 'proposal', label: '기업 제안서' },
+      { id: 'cooperation', label: '대외 협력' },
+      { id: 'report', label: '성과 보고' }
+    ]
+  },
+  { 
+    id: 'forms-templates', 
+    label: '소통 & 양식', 
+    icon: <MessageSquare size={18} />,
+    subCategories: [
+      { id: 'msg-template', label: '메시지 양식' },
+      { id: 'doc-form', label: '신청 서류' },
+      { id: 'guide', label: '안내 가이드' }
+    ]
+  },
+  { 
+    id: 'legal-docs', 
+    label: '증빙 & 문서', 
+    icon: <ShieldCheck size={18} />,
+    subCategories: [
+      { id: 'legal-paper', label: '법적 서류' },
+      { id: 'official-cert', label: '공식 인증' }
+    ]
+  },
+  { 
+    id: 'brand-assets', 
+    label: '브랜드 자산', 
+    icon: <Palette size={18} />,
+    subCategories: [
+      { id: 'branding', label: '브랜딩' },
+      { id: 'coaching-guide', label: '코칭 가이드' }
+    ]
+  },
 ];
 
 const ITEMS: DashboardItem[] = [
@@ -59,7 +146,8 @@ const ITEMS: DashboardItem[] = [
     id: 'lite',
     title: '맞춤 코치 조회',
     description: '코칭패스 대시보드가 제공하는 맞춤형 코칭 서비스를 통해 당신의 비즈니스를 한 단계 더 성장시키세요.',
-    category: 'hr',
+    category: 'ai-solution',
+    subCategory: 'smart-tool',
     icon: <Key className="text-brand-gold" />,
     url: 'https://ai-149827241755.us-west1.run.app'
   },
@@ -67,7 +155,8 @@ const ITEMS: DashboardItem[] = [
     id: 'custom',
     title: '기업 맞춤 솔루션',
     description: '기업의 특성과 니즈에 맞춘 최적화된 맞춤형 AI 솔루션을 제공합니다.',
-    category: 'management',
+    category: 'ai-solution',
+    subCategory: 'custom-ai',
     icon: <Monitor className="text-brand-gold" />,
     url: 'https://service-856804452068.us-west1.run.app'
   },
@@ -75,7 +164,8 @@ const ITEMS: DashboardItem[] = [
     id: 'editing',
     title: '코칭패스 서류 첨삭',
     description: '전문적인 AI 기술을 활용하여 자기소개서 및 이력서 등 각종 서류를 완벽하게 첨삭해 드립니다.',
-    category: 'hr',
+    category: 'edu-management',
+    subCategory: 'student-care',
     icon: <FileText className="text-brand-gold" />,
     url: 'https://ai-645334686104.us-west1.run.app'
   },
@@ -83,7 +173,8 @@ const ITEMS: DashboardItem[] = [
     id: 'documents',
     title: '코칭패스 학원 증빙 서류',
     description: '코칭패스 학원 운영 및 관리에 필요한 증빙 서류들을 확인하고 관리하세요.',
-    category: 'management',
+    category: 'legal-docs',
+    subCategory: 'legal-paper',
     icon: <FileText className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1lqzWMzeYlQZikikFX4wYLbmpv_QRljxHWLZJqAfVk2g/edit?usp=sharing'
   },
@@ -91,7 +182,8 @@ const ITEMS: DashboardItem[] = [
     id: 'sms-generator',
     title: '코칭패스 안내문자 생성기',
     description: '고객 맞춤형 안내 문자를 빠르고 효율적으로 생성하여 소통의 퀄리티를 높이세요.',
-    category: 'marketing',
+    category: 'strategic-marketing',
+    subCategory: 'content-plan',
     icon: <MessageSquare className="text-brand-gold" />,
     url: 'https://service-439879309727.us-west1.run.app/'
   },
@@ -99,7 +191,8 @@ const ITEMS: DashboardItem[] = [
     id: 'missed-call-notice',
     title: '부재중 안내문자',
     description: '부재 시 고객에게 자동으로 전송될 정중하고 명확한 안내 문구를 확인하고 활용하세요.',
-    category: 'notice',
+    category: 'forms-templates',
+    subCategory: 'msg-template',
     icon: <MessageSquare className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1N4VXCfTI1iE8dbeiShV_HbJjgzFJAW39769EXz0Vd1k/edit?usp=sharing'
   },
@@ -107,7 +200,8 @@ const ITEMS: DashboardItem[] = [
     id: 'schedule-inquiry',
     title: '일정문의',
     description: '일정 문의 시 활용할 수 있는 표준 양식을 확인하고 효율적으로 일정을 조율하세요.',
-    category: 'notice',
+    category: 'forms-templates',
+    subCategory: 'doc-form',
     icon: <FileText className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/19BdYW_zJkR2rAwi_OW5eKSDBFJYFunmw8F9QPVDgWRE/edit?usp=sharing'
   },
@@ -115,7 +209,8 @@ const ITEMS: DashboardItem[] = [
     id: 'pre-reservation-form',
     title: '가예약 양식',
     description: '가예약 접수 시 활용할 수 있는 표준 양식을 확인하고 예약 프로세스를 체계화하세요.',
-    category: 'notice',
+    category: 'forms-templates',
+    subCategory: 'doc-form',
     icon: <FileText className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1yhQBosWWbJ-bvCe4wlUi5sVcc3eVWOmf76k07r-Hc1o/edit?usp=sharing'
   },
@@ -123,7 +218,8 @@ const ITEMS: DashboardItem[] = [
     id: 'pre-reservation-msg',
     title: '가예약 안내문자',
     description: '가예약 시 고객에게 전송하는 표준 안내 문자 양식입니다.',
-    category: 'notice',
+    category: 'forms-templates',
+    subCategory: 'msg-template',
     icon: <MessageSquare className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1yhQBosWWbJ-bvCe4wlUi5sVcc3eVWOmf76k07r-Hc1o/edit?usp=sharing'
   },
@@ -131,23 +227,26 @@ const ITEMS: DashboardItem[] = [
     id: 'coaching-place-info',
     title: '코칭 장소 안내',
     description: '코칭이 진행되는 장소에 대한 상세 정보와 안내 문구입니다.',
-    category: 'notice',
+    category: 'forms-templates',
+    subCategory: 'guide',
     icon: <Monitor className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1BiLPVCv8b2sp7-4fft5Ph3jpXP3c5oJgzxevv_y78j0/edit?usp=sharing'
   },
   {
     id: 'certification-image',
-    title: '코칭패스 국가보훈부 지정교육기관 인증이미지',
+    title: '국가보훈부 지정교육기관 인증이미지',
     description: '국가보훈부로부터 지정받은 공식 교육기관 인증 이미지입니다. 홍보 및 신뢰도 향상을 위해 활용하세요.',
-    category: 'image',
+    category: 'legal-docs',
+    subCategory: 'official-cert',
     icon: <Image className="text-brand-gold" />,
     url: 'https://drive.google.com/file/d/1cJGHeI36jwUgsildWW2jQ8zfQuvwDK0f/view?usp=sharing'
   },
   {
     id: 'registration-cert',
-    title: '넥스트인 원격학원(코칭패스) 학원설립운영 등록증명서',
+    title: '원격학원 학원설립운영 등록증명서',
     description: '넥스트인 원격학원의 공식 학원설립운영 등록증명서입니다. 정식 등록된 교육기관임을 증명하는 서류입니다.',
-    category: 'image',
+    category: 'legal-docs',
+    subCategory: 'legal-paper',
     icon: <Image className="text-brand-gold" />,
     url: 'https://drive.google.com/file/d/1pwl7m6YOiYLFHNKAA6lH2xv8lxvpLGQN/view?usp=sharing'
   },
@@ -155,7 +254,8 @@ const ITEMS: DashboardItem[] = [
     id: 'business-registration',
     title: '주식회사 넥스트인 사업자등록증',
     description: '주식회사 넥스트인의 공식 사업자등록증 이미지입니다. 법인 사업자 정보를 확인할 수 있습니다.',
-    category: 'image',
+    category: 'legal-docs',
+    subCategory: 'legal-paper',
     icon: <Image className="text-brand-gold" />,
     url: 'https://drive.google.com/file/d/1cGQI4I7nb_Knq3wpf_DVEb4N2v8cIyEP/view?usp=sharing'
   },
@@ -163,7 +263,8 @@ const ITEMS: DashboardItem[] = [
     id: 'coaching-prep-corp',
     title: '코칭 전 준비물_기업',
     description: '코칭 시작 전 기업 측에서 준비해야 할 사항들을 확인할 수 있는 안내 이미지입니다.',
-    category: 'image',
+    category: 'brand-assets',
+    subCategory: 'coaching-guide',
     icon: <Image className="text-brand-gold" />,
     url: 'https://drive.google.com/file/d/1TVbiVT_yl8eedtweHDAQCcCmblQxINjp/view?usp=drive_link'
   },
@@ -171,23 +272,35 @@ const ITEMS: DashboardItem[] = [
     id: 'coaching-prep-academic',
     title: '코칭 전 준비물_진학',
     description: '코칭 시작 전 진학 준비생들이 준비해야 할 사항들을 확인할 수 있는 안내 이미지입니다.',
-    category: 'image',
+    category: 'brand-assets',
+    subCategory: 'coaching-guide',
     icon: <Image className="text-brand-gold" />,
     url: 'https://drive.google.com/file/d/1kkUZzs32HprwqAzqcAEDkCfOpPxEvYyM/view?usp=drive_link'
   },
   {
+    id: 'coachingpass-logo',
+    title: '코칭패스 로고',
+    description: '코칭패스 브랜드 로고 파일들이 포함된 폴더입니다. 다양한 형식의 로고를 확인하고 다운로드할 수 있습니다.',
+    category: 'brand-assets',
+    subCategory: 'branding',
+    icon: <Image className="text-brand-gold" />,
+    url: 'https://drive.google.com/drive/folders/1NLhbzyLFujX5EiZJjTCkx3xUMyqxrpJA?usp=sharing'
+  },
+  {
     id: 'toss-interest-free',
-    title: '카드사 무이자 할부 (토스페이먼츠 - 매월 자동변경)',
+    title: '카드사 무이자 할부 정보',
     description: '토스페이먼츠에서 제공하는 매월 업데이트되는 카드사별 무이자 할부 혜택 정보를 확인하세요.',
-    category: 'sales',
+    category: 'sales-service',
+    subCategory: 'operation',
     icon: <CreditCard className="text-brand-gold" />,
     url: 'https://consumer.tosspayments.com/notice/free-installment'
   },
   {
     id: 'face-to-face-reservations',
-    title: '대면 장소 예약 관련 시간별 맨션 담당자',
+    title: '대면 장소 예약 시간별 담당자',
     description: '대면 장소 예약 시 시간대별 담당자 정보를 확인하고 업무를 조율하세요.',
-    category: 'sales',
+    category: 'sales-service',
+    subCategory: 'operation',
     icon: <Users className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1dL4cg1TmFxAWKrVHDEC3UMGeijXpjjYV2yHdExZ44fY/edit?usp=sharing'
   },
@@ -195,7 +308,8 @@ const ITEMS: DashboardItem[] = [
     id: 'parking-info',
     title: '코칭장소 주차관련 안내',
     description: '코칭 장소별 주차 가능 여부와 이용 방법을 확인하여 방문 시 불편함을 최소화하세요.',
-    category: 'sales',
+    category: 'forms-templates',
+    subCategory: 'guide',
     icon: <Info className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1Gqnd9KCCQ-VYT4ft4Y03z9ykYCUolLXc6DTzsV4g61M/edit?usp=sharing'
   },
@@ -203,7 +317,8 @@ const ITEMS: DashboardItem[] = [
     id: 'solution-required-info',
     title: '솔루션 신청시 필수로 전달해야 되는 사항',
     description: '솔루션 신청 시 누락 없이 정확한 정보 전달을 위해 필요한 필수 항목들을 확인하세요.',
-    category: 'sales',
+    category: 'sales-service',
+    subCategory: 'manual',
     icon: <CheckCircle2 className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1NjCpDthYImj66KSFGNr82vBK14Y863mxAFGVFuaK9BE/edit?usp=sharing'
   },
@@ -211,7 +326,8 @@ const ITEMS: DashboardItem[] = [
     id: 'flow-calendar-manual',
     title: '일정확정시 플로우 캘린더 추가 매뉴얼',
     description: '코칭 일정이 확정된 후 플로우 캘린더에 일정을 등록하는 상세 매뉴얼입니다.',
-    category: 'sales',
+    category: 'sales-service',
+    subCategory: 'manual',
     icon: <Calendar className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/17a2n9UKcX4Jn-Iauydl3Y4PQ165FqfFSvqrdq0_WI0M/edit?usp=sharing'
   },
@@ -219,7 +335,8 @@ const ITEMS: DashboardItem[] = [
     id: 'coupon-manual',
     title: '코칭패스 쿠폰번호 및 사용방법',
     description: '코칭패스 쿠폰 발급 번호와 웹사이트에서의 사용 방법을 안내하는 매뉴얼입니다.',
-    category: 'sales',
+    category: 'sales-service',
+    subCategory: 'manual',
     icon: <Ticket className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1Vep79nvGaoLnmiMVlsYtHE2tiBgjAhHAqljcxhOtDmw/edit?usp=sharing'
   },
@@ -227,9 +344,55 @@ const ITEMS: DashboardItem[] = [
     id: 'cs-business-hours',
     title: '코칭패스 CS 업무시간 안내',
     description: '코칭패스의 고객 서비스(CS) 운영 시간과 대응 가능 시간대를 확인하세요.',
-    category: 'sales',
+    category: 'sales-service',
+    subCategory: 'operation',
     icon: <Clock className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1QJl0diRF7uA4knQoi6CD9Wo4yl3OIwjvv5KjcP0J0rk/edit?usp=sharing'
+  },
+  {
+    id: 'recruit-calendar-catch',
+    title: '채용달력 - 캐치',
+    description: '캐치(Catch)에서 제공하는 최신 기업별 채용 일정을 월간 단위로 확인하세요.',
+    category: 'strategic-marketing',
+    subCategory: 'mkt-strategy',
+    icon: <Calendar className="text-brand-gold" />,
+    url: 'https://www.catch.co.kr/NCS/RecruitCalendar/Month'
+  },
+  {
+    id: 'recruit-calendar-saramin',
+    title: '채용달력 - 사람인',
+    description: '사람인(Saramin)의 주간/월간 채용 달력을 통해 주요 기업의 공고 마감일을 관리하세요.',
+    category: 'strategic-marketing',
+    subCategory: 'mkt-strategy',
+    icon: <Calendar className="text-brand-gold" />,
+    url: 'https://calendar.saramin.co.kr/2025/1/weekly'
+  },
+  {
+    id: 'recruit-calendar-jobkorea',
+    title: '채용달력 - 잡코리아',
+    description: '잡코리아(JobKorea)의 신입/경력 채용 일정을 한눈에 파악할 수 있는 채용 달력입니다.',
+    category: 'strategic-marketing',
+    subCategory: 'mkt-strategy',
+    icon: <Calendar className="text-brand-gold" />,
+    url: 'https://www.jobkorea.co.kr/starter/calendar'
+  },
+  {
+    id: 'coaching-success-stories',
+    title: '코칭패스 합격후기 모음',
+    description: '코칭패스를 통해 합격의 기쁨을 누린 수강생들의 생생한 합격 후기와 성공 사례들을 확인하세요.',
+    category: 'strategic-marketing',
+    subCategory: 'mkt-strategy',
+    icon: <Star className="text-brand-gold" />,
+    url: 'https://drive.google.com/drive/folders/1pLaWRnS0MUGFgqM17wWBAAPTjoy1hUC4?usp=sharing'
+  },
+  {
+    id: 'coachingpass-leaflet',
+    title: '코칭패스 리플렛 (문의자 제공 권장)',
+    description: '서비스 문의자에게 제공하기 적합한 코칭패스 공식 안내 리플렛입니다. 핵심 솔루션과 혜택이 정리되어 있습니다.',
+    category: 'strategic-marketing',
+    subCategory: 'ad-promo',
+    icon: <BookOpen className="text-brand-gold" />,
+    url: 'https://drive.google.com/drive/folders/1BKMCs7Jtl9Pgofr_GEYXEvt05adTpXgV?usp=sharing'
   }
 ];
 
@@ -237,10 +400,16 @@ export default function App() {
   const [apiKey, setApiKey] = useState<string>(() => localStorage.getItem('GEMINI_API_KEY') || '');
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [activeSubCategory, setActiveSubCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [progress, setProgress] = useState(0);
   const [showMaintenance, setShowMaintenance] = useState(false);
   const [showUsage, setShowUsage] = useState(false);
+
+  // Reset subcategory when main category changes
+  useEffect(() => {
+    setActiveSubCategory('all');
+  }, [activeCategory]);
 
   // Set document title
   useEffect(() => {
@@ -266,9 +435,10 @@ export default function App() {
 
   const filteredItems = ITEMS.filter(item => {
     const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+    const matchesSubCategory = activeSubCategory === 'all' || item.subCategory === activeSubCategory;
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          item.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesSubCategory && matchesSearch;
   });
 
   return (
@@ -397,36 +567,81 @@ export default function App() {
         <section className="max-w-7xl mx-auto px-6 py-12">
           
           {/* Search & Filters */}
-          <div className="bg-brand-card border border-brand-border rounded-3xl p-6 mb-12 shadow-xl">
-            <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
-              <div className="relative w-full lg:max-w-md">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                <input 
-                  type="text" 
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-brand-dark border border-brand-border rounded-2xl py-3 pl-12 pr-4 text-sm focus:outline-none focus:border-purple-500/50 transition-colors"
-                />
+          <div className="bg-brand-card border border-brand-border rounded-3xl p-6 mb-12 shadow-xl space-y-8">
+            <div className="flex flex-col gap-10 items-center justify-between">
+              <div className="relative w-full max-w-2xl group">
+                {/* Continuous Breathing Glow Effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-brand-gold/20 via-purple-500/20 to-brand-gold/20 rounded-[22px] blur-xl opacity-70 animate-pulse group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative">
+                  <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-gold group-focus-within:scale-110 transition-transform" size={20} />
+                  <input 
+                    type="text" 
+                    placeholder="🔍 찾으시는 항목을 검색하세요!"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-black/60 backdrop-blur-xl border-2 border-brand-gold/30 rounded-2xl py-4 pl-14 pr-20 text-base font-medium placeholder:text-gray-500 focus:outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+                  />
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-3 py-1.5 bg-brand-gold border border-brand-gold/50 rounded-lg shadow-lg shadow-brand-gold/20">
+                    <span className="text-xs font-black text-black tracking-tight">검색!</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2 justify-center">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full">
                 {CATEGORIES.map(cat => (
                   <button
                     key={cat.id}
                     onClick={() => setActiveCategory(cat.id)}
                     className={cn(
-                      "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all",
+                      "flex items-center justify-center gap-2 px-4 py-4 rounded-xl text-sm font-bold transition-all border",
                       activeCategory === cat.id 
-                        ? "bg-brand-gold text-black shadow-lg shadow-brand-gold/20" 
-                        : "bg-brand-dark text-gray-400 border border-brand-border hover:border-gray-700"
+                        ? "bg-brand-gold border-brand-gold text-black shadow-lg shadow-brand-gold/20" 
+                        : "bg-brand-dark text-gray-400 border-brand-border hover:border-brand-gold/50 hover:bg-brand-gold/5"
                     )}
                   >
-                    {cat.icon}
+                    {React.cloneElement(cat.icon as React.ReactElement, { size: 20 })}
                     {cat.label}
                   </button>
                 ))}
               </div>
             </div>
+
+            {/* Sub-categories */}
+            <AnimatePresence mode="wait">
+              {activeCategory !== 'all' && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="pt-6 border-t border-white/5 flex flex-wrap gap-2 justify-center"
+                >
+                  <button
+                    onClick={() => setActiveSubCategory('all')}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-xs font-bold transition-all",
+                      activeSubCategory === 'all'
+                        ? "bg-white text-black"
+                        : "bg-white/5 text-gray-500 hover:text-white"
+                    )}
+                  >
+                    전체보기
+                  </button>
+                  {CATEGORIES.find(c => c.id === activeCategory)?.subCategories.map(sub => (
+                    <button
+                      key={sub.id}
+                      onClick={() => setActiveSubCategory(sub.id)}
+                      className={cn(
+                        "px-4 py-2 rounded-full text-xs font-bold transition-all",
+                        activeSubCategory === sub.id
+                          ? "bg-brand-gold text-black italic"
+                          : "bg-white/5 text-gray-500 hover:text-white"
+                      )}
+                    >
+                      {sub.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Grid */}
