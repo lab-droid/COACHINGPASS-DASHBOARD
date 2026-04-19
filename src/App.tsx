@@ -30,7 +30,9 @@ import {
   Zap,
   Briefcase,
   Star,
-  BookOpen
+  BookOpen,
+  Bell,
+  MessageCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
@@ -45,7 +47,14 @@ interface DashboardItem {
   tag?: string;
   icon: React.ReactNode;
   status?: 'certified' | 'free';
-  url?: string;
+  url: string;
+}
+
+interface FAQItem {
+  id: string;
+  question: string;
+  answer: string;
+  category: 'service' | 'admin' | 'sales' | 'tech';
 }
 
 interface CategoryDefinition {
@@ -56,6 +65,39 @@ interface CategoryDefinition {
 }
 
 // --- Constants ---
+
+const FAQ_ITEMS: FAQItem[] = [
+  {
+    id: 'faq-1',
+    category: 'service',
+    question: '수강생에게 리플렛은 언제 전달해야 하나요?',
+    answer: '상담 종료 후 결제 고민 중인 고객에게는 PDF 리플렛을 모바일로 전송하고, 현장 방문 고객에게는 실물 리플렛을 증정하여 서비스의 신뢰도를 높여주는 것이 좋습니다.'
+  },
+  {
+    id: 'faq-2',
+    category: 'admin',
+    question: '수강확인증 발급 요청 시 필수 정보는 무엇인가요?',
+    answer: '학생 성명, 수강 기간, 결제 내역(카드/계좌), 그리고 제출처 정보가 필요합니다. 대시보드의 "수강확인증 양식"을 다운로드하여 양식에 맞춰 작성 후 안내해 주세요.'
+  },
+  {
+    id: 'faq-3',
+    category: 'sales',
+    question: '수강료 할인 문의가 들어올 때 표준 답변은 무엇인가요?',
+    answer: '코칭패스는 정찰제 운영을 원칙으로 합니다. 다만, "친구 추천 이벤트"나 "얼리버드 할인" 기간일 경우 해당 프로모션 혜택을 안내하여 자연스럽게 등록을 유동하세요.'
+  },
+  {
+    id: 'faq-4',
+    category: 'tech',
+    question: '플로우(Flow) 교육 자료 접근이 안 될 때 어떻게 하나요?',
+    answer: '협업 툴 사용 권한은 관리자 승인이 필요합니다. 플로우 기본 교육 자료를 먼저 숙지하신 후, 팀장님께 권한 신청을 요청해 주세요.'
+  },
+  {
+    id: 'faq-5',
+    category: 'service',
+    question: '문의자 대응 시 가장 중요하게 체크해야 할 항목은?',
+    answer: '문의자의 현재 준비 상태(구직 중, 재학 중 등)와 목표 기업을 명확히 파악하는 것이 첫 번째입니다. 이를 바탕으로 맞춤형 프로그램인 코칭패스의 강점을 설명해 주세요.'
+  }
+];
 const CATEGORIES: CategoryDefinition[] = [
   { 
     id: 'all', 
@@ -431,6 +473,9 @@ export default function App() {
   }, []);
 
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
+  const [showFaq, setShowFaq] = useState(false);
+  const [showEducation, setShowEducation] = useState(false);
+  const [showToolbox, setShowToolbox] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeSubCategory, setActiveSubCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -508,21 +553,79 @@ export default function App() {
           <div className="w-8 h-8 md:w-10 md:h-10 bg-black border border-brand-gold/30 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-brand-gold/10">
             <Key className="text-brand-gold" size={18} md:size={24} />
           </div>
-          <div>
-            <h1 className="text-base md:text-xl font-bold tracking-tight">코칭패스</h1>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <h1 className="text-base md:text-xl font-bold tracking-tight">코칭패스</h1>
+              <div className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 bg-green-500/10 border border-green-500/20 rounded-md">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                <span className="text-[9px] font-black text-green-500 uppercase tracking-tighter">Live</span>
+              </div>
+            </div>
             <p className="hidden xs:block text-[8px] md:text-[10px] text-brand-gold/60 uppercase tracking-widest font-semibold">Dashboard</p>
           </div>
         </div>
 
         <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-400">
-          <a href="#" className="hover:text-brand-gold transition-colors">홈</a>
-          <a href="#" className="hover:text-brand-gold transition-colors">FQA</a>
+          <button 
+            onClick={() => {
+              setActiveCategory('all');
+              setActiveSubCategory('all');
+              setSearchQuery('');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="group relative hover:text-brand-gold transition-colors"
+          >
+            홈
+            <span className="absolute -top-1 -right-4 px-1 py-0.5 bg-brand-gold/10 text-brand-gold text-[8px] rounded-md font-black opacity-0 group-hover:opacity-100 transition-opacity">
+              {ITEMS.length}
+            </span>
+          </button>
+          <button 
+            onClick={() => setShowFaq(true)}
+            className="relative hover:text-brand-gold transition-colors"
+          >
+            FAQ
+            <span className="absolute top-0 -right-2 w-1.5 h-1.5 bg-red-500 rounded-full border border-brand-dark animate-bounce" />
+          </button>
+          <button 
+            onClick={() => setShowEducation(true)}
+            className="hover:text-brand-gold transition-colors"
+          >
+            교육센터
+          </button>
+          <button 
+            onClick={() => {
+              setActiveCategory('all');
+              setActiveSubCategory('all');
+              setSearchQuery('채용달력');
+              document.getElementById('items-grid')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="hover:text-brand-gold transition-colors"
+          >
+            채용달력
+          </button>
+          <button 
+            onClick={() => setShowToolbox(true)}
+            className="hover:text-brand-gold transition-colors"
+          >
+            업무도구
+          </button>
+          <a 
+            href="https://coachingpass.co.kr" 
+            target="_blank" 
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-4 py-2 bg-brand-gold/10 border border-brand-gold/30 text-brand-gold rounded-full hover:bg-brand-gold hover:text-black transition-all"
+          >
+            홈페이지 <ExternalLink size={14} />
+          </a>
         </nav>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <div className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 bg-brand-gold/10 border border-brand-gold/20 rounded-full">
-            <Users size={12} className="text-brand-gold" />
-            <span className="text-[10px] md:text-xs font-bold text-brand-gold whitespace-nowrap">정혁신</span>
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] font-bold text-gray-500 tabular-nums">
+              {new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}
+            </span>
+            <span className="text-[8px] font-medium text-gray-600">Dashboard Online</span>
           </div>
         </div>
       </header>
@@ -538,7 +641,26 @@ export default function App() {
             referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-transparent" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 py-12">
+          
+          {/* Home Banner / News */}
+          <div className="absolute top-[15%] left-0 w-full z-20 flex justify-center px-4">
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="group flex items-center gap-3 bg-brand-gold/10 backdrop-blur-xl border border-brand-gold/20 rounded-2xl px-4 md:px-6 py-2.5 md:py-3 shadow-2xl hover:bg-brand-gold/15 transition-all max-w-full"
+            >
+              <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 bg-brand-gold rounded-full flex items-center justify-center animate-pulse">
+                <Bell size={16} md:size={20} className="text-black" />
+              </div>
+              <div className="flex flex-col text-left overflow-hidden">
+                <span className="text-[10px] md:text-xs font-black text-brand-gold uppercase tracking-[0.15em]">Latest News</span>
+                <p className="text-xs md:text-sm font-bold text-white truncate w-[200px] sm:w-[300px] md:w-auto">코칭패스 리플렛과 수강확인증 양식이 업데이트 되었습니다.</p>
+              </div>
+              <ChevronRight size={16} className="text-brand-gold/50 group-hover:translate-x-1 transition-transform" />
+            </motion.div>
+          </div>
+
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 py-12 mt-10">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -704,7 +826,7 @@ export default function App() {
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" id="items-grid">
             <AnimatePresence mode="popLayout">
               {filteredItems.map((item, idx) => (
                 <motion.div
@@ -861,6 +983,189 @@ export default function App() {
                 className="w-full py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-2xl border border-white/10 transition-all"
               >
                 닫기
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {showFaq && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/90 md:bg-brand-dark/90 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="w-full max-w-2xl bg-brand-card border border-brand-border rounded-[32px] overflow-hidden shadow-2xl flex flex-col max-h-[85vh]"
+            >
+              <div className="p-6 md:p-8 border-b border-brand-border flex items-center justify-between bg-black/20">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-brand-gold/10 rounded-2xl flex items-center justify-center">
+                    <MessageCircle className="text-brand-gold" size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-bold">임직원 실무 FAQ</h3>
+                    <p className="text-xs text-brand-gold uppercase tracking-[0.2em] font-black opacity-60">Help Center</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowFaq(false)}
+                  className="p-2 hover:bg-white/5 rounded-full transition-colors"
+                >
+                  <XCircle size={24} className="text-gray-500" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-4">
+                {FAQ_ITEMS.map((faq) => (
+                  <div 
+                    key={faq.id}
+                    className="p-5 md:p-6 bg-brand-dark/50 border border-brand-border rounded-2xl hover:border-brand-gold/30 transition-all group"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="mt-1 w-8 h-8 rounded-lg bg-brand-gold/10 flex-shrink-0 flex items-center justify-center font-bold text-brand-gold">
+                        Q
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-base md:text-lg font-bold mb-3 text-white group-hover:text-brand-gold transition-colors">{faq.question}</h4>
+                        <div className="flex items-start gap-3 pt-4 border-t border-white/5">
+                          <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex-shrink-0 flex items-center justify-center font-bold text-purple-500 text-xs">
+                            A
+                          </div>
+                          <p className="text-sm text-gray-400 leading-relaxed font-medium">
+                            {faq.answer}
+                          </p>
+                        </div>
+                        <div className="mt-4 flex items-center gap-2">
+                          <span className={cn(
+                            "text-[10px] uppercase font-black px-2 py-0.5 rounded-full",
+                            faq.category === 'service' ? "bg-blue-500/10 text-blue-400" :
+                            faq.category === 'admin' ? "bg-green-500/10 text-green-400" :
+                            faq.category === 'sales' ? "bg-orange-500/10 text-orange-400" :
+                            "bg-purple-500/10 text-purple-400"
+                          )}>
+                            {faq.category}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-6 bg-black/40 border-t border-brand-border text-center">
+                <p className="text-xs text-gray-500 font-medium">
+                  찾으시는 질문이 없으신가요? <button onClick={() => { setShowFaq(false); setShowMaintenance(true); }} className="text-brand-gold font-bold hover:underline">유지보수 문의</button>를 통해 답변을 요청하세요.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {showEducation && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/90 md:bg-brand-dark/90 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="w-full max-w-4xl bg-brand-card border border-brand-border rounded-[32px] overflow-hidden shadow-2xl flex flex-col max-h-[85vh]"
+            >
+              <div className="p-6 md:p-8 border-b border-brand-border flex items-center justify-between bg-brand-gold/5">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-brand-gold/20 rounded-2xl flex items-center justify-center">
+                    <GraduationCap className="text-brand-gold" size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-bold italic">코칭패스 ACADEMY</h3>
+                    <p className="text-[10px] text-brand-gold uppercase tracking-[0.3em] font-black opacity-60">Education Center</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowEducation(false)}
+                  className="p-2 hover:bg-white/5 rounded-full transition-colors font-bold text-gray-500"
+                >
+                  <XCircle size={24} />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6 md:p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {ITEMS.filter(i => i.category === 'sales-service' && i.subCategory === 'manual').map(item => (
+                    <div key={item.id} className="p-6 bg-brand-dark/50 border border-brand-border rounded-2xl hover:border-brand-gold/40 transition-all group">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-brand-gold/10 rounded-xl group-hover:scale-110 transition-transform">
+                          <BookOpen className="text-brand-gold" size={20} />
+                        </div>
+                        <h4 className="font-bold text-base">{item.title}</h4>
+                      </div>
+                      <p className="text-xs text-gray-500 mb-6 leading-relaxed">{item.description}</p>
+                      <a href={item.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs font-black text-brand-gold hover:underline">
+                        학습 시작하기 <ExternalLink size={12} />
+                      </a>
+                    </div>
+                  ))}
+                  <div className="p-6 bg-brand-gold/5 border border-dashed border-brand-gold/30 rounded-2xl flex flex-col items-center justify-center text-center opacity-60">
+                    <div className="w-10 h-10 border border-brand-gold/30 rounded-full flex items-center justify-center mb-3">
+                      <Zap size={18} className="text-brand-gold" />
+                    </div>
+                    <span className="text-xs font-bold text-brand-gold">준비 중인 코스</span>
+                    <p className="text-[10px] text-gray-500 mt-1">실무 심화 학습 영상이 준비 중입니다.</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {showToolbox && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/95 backdrop-blur-md"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="w-full max-w-lg bg-brand-card border border-brand-border rounded-[32px] p-8 shadow-2xl"
+            >
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center">
+                  <Briefcase className="text-white" size={24} />
+                </div>
+                <h3 className="text-2xl font-bold">협업 및 실무 도구</h3>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { name: 'Flow', icon: <Rocket size={20} />, color: 'bg-blue-600', url: 'https://flow.team' },
+                  { name: 'Workspace', icon: <Monitor size={20} />, color: 'bg-green-600', url: 'https://workspace.google.com' },
+                  { name: 'Notion', icon: <FileText size={20} />, color: 'bg-black border border-white/20', url: 'https://notion.so' },
+                  { name: 'Analytics', icon: <BarChart3 size={20} />, color: 'bg-orange-600', url: 'https://analytics.google.com' }
+                ].map(tool => (
+                  <a key={tool.name} href={tool.url} target="_blank" rel="noreferrer" className="flex flex-col items-center gap-3 p-6 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-transparent hover:border-white/10">
+                    <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center shadow-lg", tool.color)}>
+                      {tool.icon}
+                    </div>
+                    <span className="text-xs font-bold">{tool.name}</span>
+                  </a>
+                ))}
+              </div>
+
+              <button 
+                onClick={() => setShowToolbox(false)}
+                className="w-full mt-8 py-4 bg-brand-gold text-black font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all"
+              >
+                도구함 닫기
               </button>
             </motion.div>
           </motion.div>
