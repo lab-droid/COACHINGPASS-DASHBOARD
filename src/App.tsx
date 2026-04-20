@@ -453,6 +453,15 @@ const ITEMS: DashboardItem[] = [
     subCategory: 'manual',
     icon: <FileText className="text-brand-gold" />,
     url: 'https://drive.google.com/file/d/1o44jeB6ZBaFbtZvr0Yy3O9rVZVqR8-Fd/view?usp=sharing'
+  },
+  {
+    id: 'veteran-support-manual',
+    title: '보훈 취업수강료 지원 매뉴얼',
+    description: '넥스트인 원격학원(코칭패스)에서 제공하는 보훈 대상자 대상 취업수강료 지원 제도 안내 및 신청 매뉴얼입니다.',
+    category: 'sales-service',
+    subCategory: 'manual',
+    icon: <FileText className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1iTxFju2iuQNYzhnYnS_Vg4TUnPf28-6adrxy9YALBxU/edit?usp=sharing'
   }
 ];
 
