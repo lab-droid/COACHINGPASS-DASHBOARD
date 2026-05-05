@@ -55,7 +55,7 @@ interface FAQItem {
   id: string;
   question: string;
   answer: string;
-  category: 'service' | 'admin' | 'sales' | 'tech';
+  category: 'counseling' | 'payment' | 'admin' | 'system' | 'marketing';
 }
 
 interface PatchNote {
@@ -74,40 +74,109 @@ interface CategoryDefinition {
 
 // --- Constants ---
 
+const FAQ_CATEGORIES = [
+  { id: 'all', label: '전체보기' },
+  { id: 'counseling', label: '상담 & 서비스' },
+  { id: 'payment', label: '결제 & 환불' },
+  { id: 'admin', label: '서류 & 행정' },
+  { id: 'marketing', label: '홍보 & 마케팅' },
+  { id: 'system', label: '시스템 & 도구' }
+];
+
 const FAQ_ITEMS: FAQItem[] = [
+  // 상담 & 서비스 (counseling)
   {
     id: 'faq-1',
-    category: 'service',
-    question: '수강생에게 리플렛은 언제 전달해야 하나요?',
-    answer: '상담 종료 후 결제 고민 중인 고객에게는 PDF 리플렛을 모바일로 전송하고, 현장 방문 고객에게는 실물 리플렛을 증정하여 서비스의 신뢰도를 높여주는 것이 좋습니다.'
+    category: 'counseling',
+    question: '수강생 상담 시 가장 중요하게 체크해야 할 항목은 무엇인가요?',
+    answer: '문의자의 현재 준비 상태(구직 중, 재학 중, 이직 준비 등)와 목표 기업/직무를 명확히 파악하는 것이 첫 번째입니다. 이를 바탕으로 맞춤형 프로그램인 코칭패스의 강점을 설명해 주시고, 합격 사례를 함께 제시하면 신뢰도를 높일 수 있습니다.'
   },
   {
     id: 'faq-2',
-    category: 'admin',
-    question: '수강확인증 발급 요청 시 필수 정보는 무엇인가요?',
-    answer: '학생 성명, 수강 기간, 결제 내역(카드/계좌), 그리고 제출처 정보가 필요합니다. 대시보드의 "수강확인증 양식"을 다운로드하여 양식에 맞춰 작성 후 안내해 주세요.'
+    category: 'counseling',
+    question: '현장 방문 고객과 온라인 문의 고객의 응대 방식에 차이가 있나요?',
+    answer: '현장 방문 고객에게는 실물 리플렛과 교재 샘플을 보여주며 시각적인 신뢰를 주는 것이 중요합니다. 온라인 문의 고객에게는 모바일로 확인하기 편한 PDF 리플렛과 카드뉴스 형태의 합격 사례를 신속하게 전송하여 흥미를 유지시키는 것이 좋습니다.'
   },
   {
     id: 'faq-3',
-    category: 'sales',
-    question: '수강료 할인 문의가 들어올 때 표준 답변은 무엇인가요?',
-    answer: '코칭패스는 정찰제 운영을 원칙으로 합니다. 다만, "친구 추천 이벤트"나 "얼리버드 할인" 기간일 경우 해당 프로모션 혜택을 안내하여 자연스럽게 등록을 유동하세요.'
+    category: 'counseling',
+    question: '코칭 일정 변경을 요청하는 수강생은 어떻게 응대해야 하나요?',
+    answer: '강사님의 일정을 먼저 확인한 후, 수강생에게 대안 일정을 최소 2~3개 제안해 주세요. 잦은 변경은 학습 흐름을 깰 수 있음을 부드럽게 안내하며 가급적 확정된 일정을 지키도록 독려하는 것이 좋습니다.'
   },
+  
+  // 결제 & 환불 (payment)
   {
     id: 'faq-4',
-    category: 'tech',
-    question: '플로우(Flow) 교육 자료 접근이 안 될 때 어떻게 하나요?',
-    answer: '협업 툴 사용 권한은 관리자 승인이 필요합니다. 플로우 기본 교육 자료를 먼저 숙지하신 후, 팀장님께 권한 신청을 요청해 주세요.'
+    category: 'payment',
+    question: '수강료 할인이나 프로모션 문의가 들어올 때 표준 답변은 무엇인가요?',
+    answer: '코칭패스는 교육의 질을 유지하기 위해 정찰제 운영을 원칙으로 합니다. 다만, "지인 추천 혜택"이나 한시적인 "얼리버드 이벤트" 기간일 경우 해당 혜택을 적극 안내하여 등록을 유도하세요.'
   },
   {
     id: 'faq-5',
-    category: 'service',
-    question: '문의자 대응 시 가장 중요하게 체크해야 할 항목은?',
-    answer: '문의자의 현재 준비 상태(구직 중, 재학 중 등)와 목표 기업을 명확히 파악하는 것이 첫 번째입니다. 이를 바탕으로 맞춤형 프로그램인 코칭패스의 강점을 설명해 주세요.'
+    category: 'payment',
+    question: '토스페이먼츠 카드사 무이자 할부 정보는 어디서 확인하나요?',
+    answer: '카드사 무이자 혜택은 매월 변경될 수 있습니다. 대시보드의 \'영업 서비스 > 운영 & 결제\' 카테고리에 있는 "카드사 무이자 할부 정보" 바로가기를 클릭하여 고객에게 최신 혜택을 안내해 주세요.'
+  },
+  {
+    id: 'faq-6',
+    category: 'payment',
+    question: '수강 중간에 환불을 요청하는 경우 절차가 어떻게 되나요?',
+    answer: '코칭패스의 환불 규정에 따라 진행률에 비례하여 환불액이 산정됩니다. 즉시 \'수강생 케어\' 매뉴얼의 환불 규정을 확인하시고, 불만 사항이 있다면 먼저 충분히 경청한 후 운영팀에 보고해 주세요.'
+  },
+
+  // 서류 & 행정 (admin)
+  {
+    id: 'faq-7',
+    category: 'admin',
+    question: '수강확인증 및 출석인증서 발급 요청 시 필수 정보는 무엇인가요?',
+    answer: '학생 성명, 생년월일, 수강 기간, 결제 내역(보훈 지원 등), 제출처 정보가 필요합니다. 대시보드의 "수강확인증 양식"을 다운로드하여 양식에 맞춰 작성 후 PDF로 변환하여 전달해 주세요.'
+  },
+  {
+    id: 'faq-8',
+    category: 'admin',
+    question: '보훈 취업수강료 지원 서류는 어떻게 준비하나요?',
+    answer: '대시보드에 업데이트된 "보훈 취업수강료 지원 매뉴얼"을 참고하세요. 관할 보훈지청에 제출할 서류 목록(지원 신청서, 학원 등록증, 수강내역서 등)을 꼼꼼히 확인하고 수강생에게 발급해 줘야 합니다.'
+  },
+  
+  // 홍보 & 마케팅 (marketing)
+  {
+    id: 'faq-9',
+    category: 'marketing',
+    question: '상담 후 결제를 고민하는 고객에게 어떤 자료를 보내야 하나요?',
+    answer: '대시보드의 "합격후기 모음" 구글 드라이브 링크에 접근하여, 지원자가 목표로 하는 직무나 기업과 유사한 합격 사례를 발췌해 보내주세요. 실제 사례가 가장 강력한 설득력을 가집니다.'
+  },
+  {
+    id: 'faq-10',
+    category: 'marketing',
+    question: '블로그나 SNS 홍보 시 공식 인증 로고를 사용해도 되나요?',
+    answer: '네, 대시보드의 "브랜드 자산" 카테고리에 있는 "코칭패스 로고"와 "국가보훈부 인증이미지"를 가이드라인에 맞춰 활용하시면 됩니다. 임의로 색상이나 비율을 변경하는 것은 금지되어 있습니다.'
+  },
+
+  // 시스템 & 도구 (system)
+  {
+    id: 'faq-11',
+    category: 'system',
+    question: '협업 툴 플로우(Flow) 교육 자료 접근이나 권한이 없을 때 어떻게 하나요?',
+    answer: '협업 툴 사용 권한 및 특정 프로젝트 참여는 관리자 승인이 필요합니다. 관리팀에 권한을 요청하시고, 부여받기 전까지는 대시보드의 "플로우 기본 교육 자료"를 통해 사용법을 먼저 숙지해 주세요.'
+  },
+  {
+    id: 'faq-12',
+    category: 'system',
+    question: '코칭패스 안내문자 생성기는 언제 활용하나요?',
+    answer: '가예약 안내, 방문 상담 안내, 부재중 알림 등 고객에게 메시지를 보낼 때 활용하세요. AI가 상황에 맞는 정중한 문구를 제안해 주어 업무 시간을 단축하고 응대 퀄리티를 통일할 수 있습니다.'
   }
 ];
 
 const PATCH_NOTES: PatchNote[] = [
+  {
+    id: 'v1.4.5',
+    date: '2026.05.05',
+    version: 'v1.4.5',
+    changes: [
+      '임직원 실무 FAQ 대규모 업데이트 및 카테고리 세분화 (상담, 결제, 행정 등)',
+      'FAQ 모달 내 카테고리 필터링 기능 도입'
+    ]
+  },
   {
     id: 'v1.4.4',
     date: '2026.05.05',
@@ -572,6 +641,7 @@ export default function App() {
   const [showFaq, setShowFaq] = useState(false);
   const [showEducation, setShowEducation] = useState(false);
   const [showPatchNotes, setShowPatchNotes] = useState(false);
+  const [activeFaqCategory, setActiveFaqCategory] = useState<string>('all');
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeSubCategory, setActiveSubCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -1144,8 +1214,26 @@ export default function App() {
                 </button>
               </div>
 
+              {/* FAQ Category Filter */}
+              <div className="px-6 md:px-8 py-4 border-b border-white/5 flex flex-wrap gap-2">
+                {FAQ_CATEGORIES.map(cat => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveFaqCategory(cat.id)}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap",
+                      activeFaqCategory === cat.id
+                        ? "bg-brand-gold text-black italic"
+                        : "bg-white/5 text-gray-500 hover:text-white"
+                    )}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+
               <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-4">
-                {FAQ_ITEMS.map((faq) => (
+                {FAQ_ITEMS.filter(faq => activeFaqCategory === 'all' || faq.category === activeFaqCategory).map((faq) => (
                   <div 
                     key={faq.id}
                     className="p-5 md:p-6 bg-brand-dark/50 border border-brand-border rounded-2xl hover:border-brand-gold/30 transition-all group"
@@ -1166,13 +1254,14 @@ export default function App() {
                         </div>
                         <div className="mt-4 flex items-center gap-2">
                           <span className={cn(
-                            "text-[10px] uppercase font-black px-2 py-0.5 rounded-full",
-                            faq.category === 'service' ? "bg-blue-500/10 text-blue-400" :
-                            faq.category === 'admin' ? "bg-green-500/10 text-green-400" :
-                            faq.category === 'sales' ? "bg-orange-500/10 text-orange-400" :
-                            "bg-purple-500/10 text-purple-400"
+                            "text-[10px] uppercase font-black px-2 py-0.5 rounded-full inline-flex",
+                            faq.category === 'counseling' ? "bg-blue-500/10 text-blue-400 border border-blue-500/20" :
+                            faq.category === 'payment' ? "bg-orange-500/10 text-orange-400 border border-orange-500/20" :
+                            faq.category === 'admin' ? "bg-green-500/10 text-green-400 border border-green-500/20" :
+                            faq.category === 'marketing' ? "bg-pink-500/10 text-pink-400 border border-pink-500/20" :
+                            "bg-purple-500/10 text-purple-400 border border-purple-500/20"
                           )}>
-                            {faq.category}
+                            {FAQ_CATEGORIES.find(c => c.id === faq.category)?.label || faq.category}
                           </span>
                         </div>
                       </div>
