@@ -109,6 +109,14 @@ const FAQ_ITEMS: FAQItem[] = [
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    id: 'v1.4.4',
+    date: '2026.05.05',
+    version: 'v1.4.4',
+    changes: [
+      '보안 강화: 외부 사용자 개발자 도구 및 우클릭 접근 차단 적용'
+    ]
+  },
+  {
     id: 'v1.4.3',
     date: '2026.05.05',
     version: 'v1.4.3',
@@ -609,6 +617,52 @@ export default function App() {
     }, 30);
     return () => clearInterval(timer);
   }, [isMounted]);
+
+  // Security: Prevent Developer Tools access
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // F12
+      if (e.key === 'F12' || e.keyCode === 123) {
+        e.preventDefault();
+      }
+      // Ctrl+Shift+I / Cmd+Option+I (Inspect)
+      if ((e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) || 
+          (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'i'))) {
+        e.preventDefault();
+      }
+      // Ctrl+Shift+J / Cmd+Option+J (Console)
+      if ((e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) || 
+          (e.metaKey && e.altKey && (e.key === 'J' || e.key === 'j'))) {
+        e.preventDefault();
+      }
+      // Ctrl+U / Cmd+Option+U (View Source)
+      if ((e.ctrlKey && (e.key === 'u' || e.key === 'U')) || 
+          (e.metaKey && e.altKey && (e.key === 'u' || e.key === 'U'))) {
+        e.preventDefault();
+      }
+      // Ctrl+Shift+C / Cmd+Shift+C (Inspect element mode)
+      if ((e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) || 
+          (e.metaKey && e.shiftKey && (e.key === 'C' || e.key === 'c'))) {
+        e.preventDefault();
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      document.addEventListener('contextmenu', handleContextMenu);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        document.removeEventListener('contextmenu', handleContextMenu);
+        document.removeEventListener('keydown', handleKeyDown);
+      }
+    };
+  }, []);
 
   const handleSaveKey = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
