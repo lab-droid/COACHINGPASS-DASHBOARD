@@ -32,7 +32,8 @@ import {
   Star,
   BookOpen,
   Bell,
-  MessageCircle
+  MessageCircle,
+  History
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
@@ -55,6 +56,13 @@ interface FAQItem {
   question: string;
   answer: string;
   category: 'service' | 'admin' | 'sales' | 'tech';
+}
+
+interface PatchNote {
+  id: string;
+  date: string;
+  version: string;
+  changes: string[];
 }
 
 interface CategoryDefinition {
@@ -96,6 +104,68 @@ const FAQ_ITEMS: FAQItem[] = [
     category: 'service',
     question: '문의자 대응 시 가장 중요하게 체크해야 할 항목은?',
     answer: '문의자의 현재 준비 상태(구직 중, 재학 중 등)와 목표 기업을 명확히 파악하는 것이 첫 번째입니다. 이를 바탕으로 맞춤형 프로그램인 코칭패스의 강점을 설명해 주세요.'
+  }
+];
+
+const PATCH_NOTES: PatchNote[] = [
+  {
+    id: 'v1.4.3',
+    date: '2026.05.05',
+    version: 'v1.4.3',
+    changes: [
+      '코칭패스 안내문자 생성기 링크 업데이트'
+    ]
+  },
+  {
+    id: 'v1.4.2',
+    date: '2026.04.21',
+    version: 'v1.4.2',
+    changes: [
+      '코칭패스 영업 FAQ 항목 추가',
+      '네비게이션바 메뉴 구성 최적화 유지'
+    ]
+  },
+  {
+    id: 'v1.4.1',
+    date: '2026.04.20',
+    version: 'v1.4.1',
+    changes: [
+      '패치노트 기능 도입 및 네비게이션바 통합',
+      '상단 LATEST NEWS 배너 제거 (공간 효율화)',
+      '보훈 취업수강료 지원 매뉴얼 신규 추가',
+      '네비게이션바 공식 홈페이지 원클릭 링크 추가'
+    ]
+  },
+  {
+    id: 'v1.4.0',
+    date: '2026.04.19',
+    version: 'v1.4.0',
+    changes: [
+      '임직원 전용 FAQ, 교육센터, 업무도구 모달 통합',
+      '상단 실시간 Live 시스템 배지 및 리소스 카운터 도입',
+      '대시보드 전체 UI 프리미엄 스타일 고도화',
+      '우측 상단 개인정보 표기 제거 및 가독성 개선'
+    ]
+  },
+  {
+    id: 'v1.3.0',
+    date: '2026.04.18',
+    version: 'v1.3.0',
+    changes: [
+      '모바일 크롬 브라우저 검은 화면(Black Screen) 오류 근본 해결',
+      'LocalStorage 보안 정책 대응 및 렌더링 예외 처리 강화',
+      '모바일 반응형 레이아웃 정밀 조정'
+    ]
+  },
+  {
+    id: 'v1.1.0',
+    date: '2026.04.17',
+    version: 'v1.1.0',
+    changes: [
+      '코칭패스 대시보드 리브랜딩 및 카테고리 대규모 개편',
+      '전략적 마케팅 및 교육 관리 등 실무 필수 자료 대거 업데이트',
+      '검색창 애니메이션 및 사용자 편의 기능(Hotkeys) 도입'
+    ]
   }
 ];
 const CATEGORIES: CategoryDefinition[] = [
@@ -227,7 +297,7 @@ const ITEMS: DashboardItem[] = [
     category: 'strategic-marketing',
     subCategory: 'content-plan',
     icon: <MessageSquare className="text-brand-gold" />,
-    url: 'https://service-439879309727.us-west1.run.app/'
+    url: 'https://service-439879309727.us-west1.run.app'
   },
   {
     id: 'missed-call-notice',
@@ -462,6 +532,15 @@ const ITEMS: DashboardItem[] = [
     subCategory: 'manual',
     icon: <FileText className="text-brand-gold" />,
     url: 'https://docs.google.com/document/d/1iTxFju2iuQNYzhnYnS_Vg4TUnPf28-6adrxy9YALBxU/edit?usp=sharing'
+  },
+  {
+    id: 'sales-faq-manual',
+    title: '코칭패스 영업 FAQ',
+    description: '코칭패스 영업 관련 자주 묻는 질문(FAQ) 모음입니다. 상담 시 필수 참고 자료로 활용하세요.',
+    category: 'sales-service',
+    subCategory: 'operation',
+    icon: <HelpCircle className="text-brand-gold" />,
+    url: 'https://docs.google.com/document/d/1gEDnPoDoKLasUWMXN24_qQhc2hmBSIKaedNXi5phGjk/edit?tab=t.iaxgda8ou036'
   }
 ];
 
@@ -484,7 +563,7 @@ export default function App() {
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
   const [showFaq, setShowFaq] = useState(false);
   const [showEducation, setShowEducation] = useState(false);
-  const [showToolbox, setShowToolbox] = useState(false);
+  const [showPatchNotes, setShowPatchNotes] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeSubCategory, setActiveSubCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -614,10 +693,11 @@ export default function App() {
             채용달력
           </button>
           <button 
-            onClick={() => setShowToolbox(true)}
-            className="hover:text-brand-gold transition-colors"
+            onClick={() => setShowPatchNotes(true)}
+            className="hover:text-brand-gold transition-colors flex items-center gap-1"
           >
-            업무도구
+            패치노트
+            <span className="w-1.5 h-1.5 bg-brand-gold rounded-full animate-pulse" />
           </button>
           <a 
             href="https://coachingpass.co.kr" 
@@ -651,25 +731,7 @@ export default function App() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-transparent" />
           
-          {/* Home Banner / News */}
-          <div className="absolute top-[15%] left-0 w-full z-20 flex justify-center px-4">
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="group flex items-center gap-3 bg-brand-gold/10 backdrop-blur-xl border border-brand-gold/20 rounded-2xl px-4 md:px-6 py-2.5 md:py-3 shadow-2xl hover:bg-brand-gold/15 transition-all max-w-full"
-            >
-              <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 bg-brand-gold rounded-full flex items-center justify-center animate-pulse">
-                <Bell size={16} md:size={20} className="text-black" />
-              </div>
-              <div className="flex flex-col text-left overflow-hidden">
-                <span className="text-[10px] md:text-xs font-black text-brand-gold uppercase tracking-[0.15em]">Latest News</span>
-                <p className="text-xs md:text-sm font-bold text-white truncate w-[200px] sm:w-[300px] md:w-auto">코칭패스 리플렛과 수강확인증 양식이 업데이트 되었습니다.</p>
-              </div>
-              <ChevronRight size={16} className="text-brand-gold/50 group-hover:translate-x-1 transition-transform" />
-            </motion.div>
-          </div>
-
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 py-12 mt-10">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 py-12">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -1134,48 +1196,62 @@ export default function App() {
           </motion.div>
         )}
 
-        {showToolbox && (
+        {showPatchNotes && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/95 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/90 md:bg-brand-dark/90 backdrop-blur-sm"
           >
             <motion.div 
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="w-full max-w-lg bg-brand-card border border-brand-border rounded-[32px] p-8 shadow-2xl"
+              className="w-full max-w-2xl bg-brand-card border border-brand-border rounded-[32px] overflow-hidden shadow-2xl flex flex-col max-h-[85vh]"
             >
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center">
-                  <Briefcase className="text-white" size={24} />
+              <div className="p-6 md:p-8 border-b border-brand-border flex items-center justify-between bg-black/20">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center">
+                    <History className="text-brand-gold" size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-bold italic">PATCH NOTES</h3>
+                    <p className="text-[10px] text-brand-gold uppercase tracking-[0.3em] font-black opacity-60">Update Log</p>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold">협업 및 실무 도구</h3>
+                <button 
+                  onClick={() => setShowPatchNotes(false)}
+                  className="p-2 hover:bg-white/5 rounded-full transition-colors"
+                >
+                  <XCircle size={24} className="text-gray-500" />
+                </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { name: 'Flow', icon: <Rocket size={20} />, color: 'bg-blue-600', url: 'https://flow.team' },
-                  { name: 'Workspace', icon: <Monitor size={20} />, color: 'bg-green-600', url: 'https://workspace.google.com' },
-                  { name: 'Notion', icon: <FileText size={20} />, color: 'bg-black border border-white/20', url: 'https://notion.so' },
-                  { name: 'Analytics', icon: <BarChart3 size={20} />, color: 'bg-orange-600', url: 'https://analytics.google.com' }
-                ].map(tool => (
-                  <a key={tool.name} href={tool.url} target="_blank" rel="noreferrer" className="flex flex-col items-center gap-3 p-6 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-transparent hover:border-white/10">
-                    <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center shadow-lg", tool.color)}>
-                      {tool.icon}
+              <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
+                {PATCH_NOTES.map((note) => (
+                  <div key={note.id} className="relative pl-8 border-l border-brand-gold/20 pb-4 last:pb-0">
+                    <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 bg-brand-gold rounded-full shadow-[0_0_10px_rgba(212,175,55,0.5)]" />
+                    <div className="mb-2 flex items-center gap-3">
+                      <span className="text-brand-gold font-mono font-bold text-sm tracking-widest">{note.version}</span>
+                      <span className="text-[10px] text-gray-600 font-bold">{note.date}</span>
                     </div>
-                    <span className="text-xs font-bold">{tool.name}</span>
-                  </a>
+                    <ul className="space-y-3">
+                      {note.changes.map((change, i) => (
+                        <li key={i} className="text-sm text-gray-300 font-medium flex items-start gap-2">
+                          <span className="text-brand-gold/60 mt-1.5 w-1 h-1 bg-brand-gold rounded-full flex-shrink-0" />
+                          {change}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
               </div>
 
-              <button 
-                onClick={() => setShowToolbox(false)}
-                className="w-full mt-8 py-4 bg-brand-gold text-black font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all"
-              >
-                도구함 닫기
-              </button>
+              <div className="p-6 bg-black/40 border-t border-brand-border text-center">
+                <p className="text-xs text-gray-500 font-medium tracking-wide">
+                  코칭패스 대시보드는 임직원분들의 피드백을 바탕으로 매일 성장하고 있습니다.
+                </p>
+              </div>
             </motion.div>
           </motion.div>
         )}
