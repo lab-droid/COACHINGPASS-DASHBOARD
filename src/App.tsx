@@ -169,6 +169,14 @@ const FAQ_ITEMS: FAQItem[] = [
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    id: 'v1.4.7',
+    date: '2026.06.06',
+    version: 'v1.4.7',
+    changes: [
+      '코칭패스 서류 첨삭 바로가기 링크 업데이트'
+    ]
+  },
+  {
     id: 'v1.4.6',
     date: '2026.06.06',
     version: 'v1.4.6',
@@ -364,7 +372,7 @@ const ITEMS: DashboardItem[] = [
     category: 'edu-management',
     subCategory: 'student-care',
     icon: <FileText className="text-brand-gold" />,
-    url: 'https://ai-645334686104.us-west1.run.app'
+    url: 'https://coachingpass-paper.fragrant-flower-7056.workers.dev'
   },
   {
     id: 'documents',
