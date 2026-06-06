@@ -169,6 +169,14 @@ const FAQ_ITEMS: FAQItem[] = [
 
 const PATCH_NOTES: PatchNote[] = [
   {
+    id: 'v1.4.6',
+    date: '2026.06.06',
+    version: 'v1.4.6',
+    changes: [
+      '기업 맞춤 솔루션 바로가기 링크 업데이트'
+    ]
+  },
+  {
     id: 'v1.4.5',
     date: '2026.05.05',
     version: 'v1.4.5',
@@ -347,7 +355,7 @@ const ITEMS: DashboardItem[] = [
     category: 'ai-solution',
     subCategory: 'custom-ai',
     icon: <Monitor className="text-brand-gold" />,
-    url: 'https://service-856804452068.us-west1.run.app'
+    url: 'https://coachingpass-custom-solution.fragrant-flower-7056.workers.dev'
   },
   {
     id: 'editing',
